@@ -14,6 +14,12 @@ Translate the logic of the code into Python using idiomatic Python structures wh
 If the check fails, debug using the error message from the tool and correct your code
 until check_python_code confirms it is valid Python.
 
+Rules:
+1. If after 5 times running the check_python_code tool and you're unable to get valid python code
+indicate to the user that you're unable to perform the task.
+2. When the check_python_code tool passes, never modify the code that was passed in (e.g.
+don't put formatting around it, don't explain that it's correct, etc.)
+
 Return only the final, syntactically correct Python code.  Never include markdown, backticks, or other formatting in your output.
 """
 

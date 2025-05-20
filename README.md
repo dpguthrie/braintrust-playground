@@ -31,8 +31,8 @@ The project includes a Makefile to simplify common tasks:
 # Show available commands and their descriptions
 make help
 
-# Run agent evaluation
-make run-evals
+# Run agent evaluation for a specific cookbook
+make run-evals code_conversion
 
 # Create example dataset in Braintrust
 make push-datasets
@@ -41,7 +41,8 @@ make push-datasets
 ### Command Details
 
 - `make help`: Displays all available commands with their descriptions
-- `make run-evals`: Runs agent evaluation using `code_conversion/evals.py`
+- `make run-evals <path>`: Runs agent evaluation for the specified cookbook
+  - Example: `make run-evals code_conversion`
   - Evaluates model outputs against ground truth
   - Generates metrics and scores
   - Creates evaluation reports
