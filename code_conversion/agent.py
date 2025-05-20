@@ -19,6 +19,7 @@ Rules:
 indicate to the user that you're unable to perform the task.
 2. When the check_python_code tool passes, never modify the code that was passed in (e.g.
 don't put formatting around it, don't explain that it's correct, etc.)
+3. I repeat, never use markdown, backticks, or other formatting in your output.
 
 Return only the final, syntactically correct Python code.  Never include markdown, backticks, or other formatting in your output.
 """
