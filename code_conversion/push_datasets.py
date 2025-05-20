@@ -9,11 +9,12 @@ load_dotenv()
 
 # Initialize the dataset in Braintrust
 dataset = braintrust.init_dataset(
-    project=os.getenv("BRAINTRUST_PROJECT"), name="SQL to Python"
+    project=os.getenv("BRAINTRUST_PROJECT_NAME"),
+    name=os.getenv("BRAINTRUST_DATASET_NAME"),
 )
 
 # Read the JSON file
-json_path = Path(__file__).parent / "sql_to_python.json"
+json_path = Path(__file__).parent / "data.json"
 with open(json_path, "r") as f:
     examples = json.load(f)
 

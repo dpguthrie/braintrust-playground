@@ -1,0 +1,42 @@
+[
+    {
+      "input": "SELECT * FROM employees WHERE department = 'Sales';",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['department'] == 'Sales']"
+    },
+    {
+      "input": "SELECT name, salary FROM employees WHERE salary > 50000 ORDER BY salary DESC;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['salary'] > 50000][['name', 'salary']].sort_values(by='salary', ascending=False)"
+    },
+    {
+      "input": "SELECT department, COUNT(*) FROM employees GROUP BY department;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees.groupby('department').size().reset_index(name='count')"
+    },
+    {
+      "input": "SELECT AVG(salary) FROM employees WHERE department = 'Engineering';",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['department'] == 'Engineering']['salary'].mean()"
+    },
+    {
+      "input": "SELECT e.name, d.name FROM employees e JOIN departments d ON e.department_id = d.id;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\ndepartments = pd.read_sql('SELECT * FROM departments', conn)\nresult = employees.merge(departments, left_on='department_id', right_on='id')[['name_x', 'name_y']].rename(columns={'name_x': 'e.name', 'name_y': 'd.name'})"
+    },
+    {
+      "input": "function greet(name: string): string {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet(\"Alice\"));",
+      "expected": "def greet(name: str) -> str:\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Alice\"))"
+    },
+    {
+      "input": "function sumArray(numbers: number[]): number {\n  return numbers.reduce((acc, val) => acc + val, 0);\n}\n\nconsole.log(sumArray([1, 2, 3, 4]));",
+      "expected": "from functools import reduce\n\ndef sum_array(numbers: list[int]) -> int:\n    return reduce(lambda acc, val: acc + val, numbers, 0)\n\nprint(sum_array([1, 2, 3, 4]))"
+    },
+    {
+      "input": "interface User {\n  name: string;\n  age: number;\n}\n\nconst user: User = { name: \"Bob\", age: 30 };\nconsole.log(JSON.stringify(user));",
+      "expected": "import json\n\nuser = {\n    \"name\": \"Bob\",\n    \"age\": 30\n}\n\nprint(json.dumps(user))"
+    },
+    {
+      "input": "for (let i = 1; i <= 5; i++) {\n  if (i % 2 === 0) {\n    console.log(i + \" is even\");\n  } else {\n    console.log(i + \" is odd\");\n  }\n}",
+      "expected": "for i in range(1, 6):\n    if i % 2 == 0:\n        print(f\"{i} is even\")\n    else:\n        print(f\"{i} is odd\")"
+    },
+    {
+      "input": "function isPalindrome(s: string): boolean {\n  const cleaned = s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();\n  return cleaned === cleaned.split('').reverse().join('');\n}\n\nconsole.log(isPalindrome(\"A man, a plan, a canal: Panama\"));",
+      "expected": "import re\n\ndef is_palindrome(s: str) -> bool:\n    cleaned = re.sub(r'[^a-zA-Z0-9]', '', s).lower()\n    return cleaned == cleaned[::-1]\n\nprint(is_palindrome(\"A man, a plan, a canal: Panama\"))"
+    }
+  ]
