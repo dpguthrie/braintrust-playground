@@ -38,5 +38,25 @@
     {
       "input": "function isPalindrome(s: string): boolean {\n  const cleaned = s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();\n  return cleaned === cleaned.split('').reverse().join('');\n}\n\nconsole.log(isPalindrome(\"A man, a plan, a canal: Panama\"));",
       "expected": "import re\n\ndef is_palindrome(s: str) -> bool:\n    cleaned = re.sub(r'[^a-zA-Z0-9]', '', s).lower()\n    return cleaned == cleaned[::-1]\n\nprint(is_palindrome(\"A man, a plan, a canal: Panama\"))"
+    },
+    {
+      "input": "package main\nimport \"fmt\"\n\nfunc greet(name string) string {\n    return fmt.Sprintf(\"Hello, %s!\", name)\n}\n\nfunc main() {\n    fmt.Println(greet(\"Alice\"))\n}",
+      "expected": "def greet(name: str) -> str:\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Alice\"))"
+    },
+    {
+      "input": "package main\nimport \"fmt\"\n\nfunc sum(numbers []int) int {\n    total := 0\n    for _, num := range numbers {\n        total += num\n    }\n    return total\n}\n\nfunc main() {\n    fmt.Println(sum([]int{1, 2, 3, 4}))\n}",
+      "expected": "def sum_numbers(numbers: list[int]) -> int:\n    total = 0\n    for num in numbers:\n        total += num\n    return total\n\nprint(sum_numbers([1, 2, 3, 4]))"
+    },
+    {
+      "input": "package main\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\ntype User struct {\n    Name string `json:\"name\"`\n    Age  int    `json:\"age\"`\n}\n\nfunc main() {\n    user := User{Name: \"Bob\", Age: 30}\n    jsonData, _ := json.Marshal(user)\n    fmt.Println(string(jsonData))\n}",
+      "expected": "import json\n\nuser = {\n    \"name\": \"Bob\",\n    \"age\": 30\n}\n\nprint(json.dumps(user))"
+    },
+    {
+      "input": "package main\nimport \"fmt\"\n\nfunc main() {\n    for i := 1; i <= 5; i++ {\n        if i%2 == 0 {\n            fmt.Printf(\"%d is even\\n\", i)\n        } else {\n            fmt.Printf(\"%d is odd\\n\", i)\n        }\n    }\n}",
+      "expected": "for i in range(1, 6):\n    if i % 2 == 0:\n        print(f\"{i} is even\")\n    else:\n        print(f\"{i} is odd\")"
+    },
+    {
+      "input": "package main\nimport (\n    \"fmt\"\n    \"regexp\"\n    \"strings\"\n)\n\nfunc isPalindrome(s string) bool {\n    re := regexp.MustCompile(`[^a-zA-Z0-9]`)\n    cleaned := strings.ToLower(re.ReplaceAllString(s, \"\"))\n    reversed := reverse(cleaned)\n    return cleaned == reversed\n}\n\nfunc reverse(s string) string {\n    runes := []rune(s)\n    for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {\n        runes[i], runes[j] = runes[j], runes[i]\n    }\n    return string(runes)\n}\n\nfunc main() {\n    fmt.Println(isPalindrome(\"A man, a plan, a canal: Panama\"))\n}",
+      "expected": "import re\n\ndef is_palindrome(s: str) -> bool:\n    cleaned = re.sub(r'[^a-zA-Z0-9]', '', s).lower()\n    return cleaned == cleaned[::-1]\n\nprint(is_palindrome(\"A man, a plan, a canal: Panama\"))"
     }
   ]

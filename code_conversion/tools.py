@@ -14,8 +14,7 @@ class RuffOutput(BaseModel):
     stderr: str = Field(description="The standard error of the Ruff command.")
 
 
-@function_tool
-def check_python_code(input: str) -> RuffOutput:
+def run_ruff(input: str) -> RuffOutput:
     # Write the code string to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".py", mode="w+", delete=False) as tmp:
         tmp.write(input)
@@ -31,3 +30,13 @@ def check_python_code(input: str) -> RuffOutput:
     return RuffOutput(
         return_code=result.returncode, stdout=result.stdout, stderr=result.stderr
     )
+
+
+def is_valid_python(output: str) -> int:
+    ruff_output = run_ruff(output)
+    return int(ruff_output.return_code == 0)
+
+
+@function_tool
+def check_python_code(input: str) -> RuffOutput:
+    return run_ruff(input)

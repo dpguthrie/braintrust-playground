@@ -6,7 +6,7 @@ from braintrust.wrappers.openai import BraintrustTracingProcessor
 from dotenv import load_dotenv
 
 from code_conversion.agent import coding_agent
-from code_conversion.scorers import is_valid_python
+from code_conversion.tools import is_valid_python
 
 load_dotenv()
 
@@ -28,4 +28,5 @@ Eval(
     task=task,
     scores=[is_valid_python],
     experiment_name="Code Conversion",
+    metadata={"model": os.environ["OPENAI_MODEL_NAME"]},
 )
