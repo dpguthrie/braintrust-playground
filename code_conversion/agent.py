@@ -1,3 +1,5 @@
+import os
+
 from agents import Agent
 
 from code_conversion.tools import check_python_code
@@ -27,5 +29,6 @@ Return only the final, syntactically correct Python code.  Never include markdow
 coding_agent = Agent(
     name="Python Conversion Agent",
     instructions=INSTRUCTIONS,
+    model=os.environ["OPENAI_MODEL_NAME"],
     tools=[check_python_code],
 )
