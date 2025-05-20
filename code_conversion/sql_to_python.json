@@ -1,0 +1,22 @@
+[
+    {
+      "input": "SELECT * FROM employees WHERE department = 'Sales';",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['department'] == 'Sales']"
+    },
+    {
+      "input": "SELECT name, salary FROM employees WHERE salary > 50000 ORDER BY salary DESC;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['salary'] > 50000][['name', 'salary']].sort_values(by='salary', ascending=False)"
+    },
+    {
+      "input": "SELECT department, COUNT(*) FROM employees GROUP BY department;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees.groupby('department').size().reset_index(name='count')"
+    },
+    {
+      "input": "SELECT AVG(salary) FROM employees WHERE department = 'Engineering';",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\nresult = employees[employees['department'] == 'Engineering']['salary'].mean()"
+    },
+    {
+      "input": "SELECT e.name, d.name FROM employees e JOIN departments d ON e.department_id = d.id;",
+      "expected": "employees = pd.read_sql('SELECT * FROM employees', conn)\ndepartments = pd.read_sql('SELECT * FROM departments', conn)\nresult = employees.merge(departments, left_on='department_id', right_on='id')[['name_x', 'name_y']].rename(columns={'name_x': 'e.name', 'name_y': 'd.name'})"
+    }
+  ]
