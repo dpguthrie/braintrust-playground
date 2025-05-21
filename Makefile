@@ -1,4 +1,4 @@
-.PHONY: help push-datasets run-evals
+.PHONY: help push-datasets run-evals push-prompts
 
 help: ## Display this help message
 	@echo "Usage: make <target>"
@@ -8,7 +8,8 @@ help: ## Display this help message
 	@echo ""
 	@echo "Examples:"
 	@echo "  make run-evals code_conversion"
-	@echo "  make push-datasets"
+	@echo "  make push-prompts code_conversion"
+	@echo "  make push-datasets code_conversion"
 
 run-evals: ## Run agent evaluation (usage: make run-evals <folder_path>)
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
@@ -17,8 +18,19 @@ run-evals: ## Run agent evaluation (usage: make run-evals <folder_path>)
 	fi
 	braintrust eval $(filter-out $@,$(MAKECMDGOALS))/
 
-push-datasets: ## Create example dataset in Braintrust
-	braintrust push code_conversion/push_datasets.py
+push-prompts: ## Push prompts to Braintrust (usage: make push-prompts <folder_path>)
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "Error: Path is required. Usage: make push-prompts <folder_path>"; \
+		exit 1; \
+	fi
+	braintrust push $(filter-out $@,$(MAKECMDGOALS))/push_prompts.py
+
+push-datasets: ## Push datasets to Braintrust (usage: make push-datasets <folder_path>)
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "Error: Path is required. Usage: make push-datasets <folder_path>"; \
+		exit 1; \
+	fi
+	braintrust push $(filter-out $@,$(MAKECMDGOALS))/push_datasets.py
 
 %:
 	@:

@@ -5,7 +5,7 @@ from braintrust import Eval, init_dataset
 from braintrust.wrappers.openai import BraintrustTracingProcessor
 from dotenv import load_dotenv
 
-from code_conversion.agent import coding_agent
+from code_conversion.agents import coding_agent
 from code_conversion.tools import is_valid_python
 
 load_dotenv()
