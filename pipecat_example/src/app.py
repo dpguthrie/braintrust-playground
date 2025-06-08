@@ -1,14 +1,17 @@
 import asyncio
 import io
 import os
-import sys
+from typing import Optional
 
 import aiohttp
 import tiktoken
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from loguru import logger
+from opentelemetry import trace
+from opentelemetry.context.context import Context
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import ReadableSpan, Span, TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor, SpanProcessor
 from pipecat.audio.vad.silero import SileroVADAnalyzer
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.runner import PipelineRunner
@@ -17,23 +20,38 @@ from pipecat.processors.aggregators.openai_llm_context import OpenAILLMContext
 from pipecat.services.cartesia.tts import CartesiaTTSService
 from pipecat.services.openai.llm import OpenAILLMService
 from pipecat.transports.services.daily import DailyParams, DailyTransport
-from pipecat.utils.tracing.setup import setup_tracing
 from pypdf import PdfReader
 from runner import configure
 
 load_dotenv()
 
-logger.remove(0)
-logger.add(sys.stderr, level="DEBUG")
+
+class PipecatAttributeTransformer(SpanProcessor):
+    def on_start(self, span: Span, parent_context: Optional[Context]) -> None:
+        pass
+
+    def on_end(self, span: ReadableSpan) -> None:
+        if span._attributes is not None:
+            input_value = span._attributes.pop("input", None)
+            if input_value is not None:
+                span._attributes["braintrust.input"] = input_value
+            output_value = span._attributes.pop("output", None)
+            if output_value is not None:
+                span._attributes["braintrust.output"] = output_value
+
+    def shutdown(self) -> None:
+        pass
+
+    def force_flush(self, timeout_millis: Optional[int] = None) -> None:
+        pass
+
 
 # Configure OpenTelemetry exporter for Braintrust
 exporter = OTLPSpanExporter()
-
-setup_tracing(
-    service_name="pipecat-demo",
-    exporter=exporter,
-    console_export=bool(os.getenv("OTEL_CONSOLE_EXPORT")),
-)
+provider = TracerProvider()
+provider.add_span_processor(PipecatAttributeTransformer())
+provider.add_span_processor(BatchSpanProcessor(exporter))
+trace.set_tracer_provider(provider)
 
 
 # Count number of tokens used in model and truncate the content
